@@ -51,4 +51,12 @@
 //   onlogin="checkLoginState();">
 // </fb:login-button>
 
+// This is the callback. It calls FB.getLoginStatus() to get the most recent login state. (statusChangeCallback() is a function that's part of the example that processes the response.)
+
+// function checkLoginState() {
+//     FB.getLoginStatus(function(response) {
+//       statusChangeCallback(response);
+//     });
+//   }
+
 

@@ -73,34 +73,58 @@ class Login extends Component {
 
     render() {
         return (
-            <Container id="logingPage" className="d-flex justify-content-center ">
-
-                <div className="Login">
-                    <Image className="mb-3" src="https://cdn.worldvectorlogo.com/logos/linkedin.svg" />
-                    <form onSubmit={this.handleSubmit}>
-                        <FormGroup controlId="name" bsSize="large">
-                            <label>Email</label>
-                            <FormControl
-                                autoFocus
-                                type="name"
-                                value={this.state.name}
-                                onChange={e => this.setName(e.target.value)}
-                            />
-                        </FormGroup>
-                        <FormGroup controlId="password" bsSize="large">
-                            <label>Password</label>
-                            <FormControl
-                                value={this.state.password}
-                                onChange={e => this.setPassword(e.target.value)}
-                                type="password"
-                            />
-                        </FormGroup>
-                        <Button block bsSize="large" type="submit">
-                            Login
-                            </Button>
-                    </form>
+            <Container className="my-5">
+            <Row>
+              <Col md={3}></Col>
+              <Col md={6} className="mt-5" style={mystyle}>
+                <img
+                  src="https://logos-world.net/wp-content/uploads/2020/04/Linkedin-Logo-2003%E2%80%932011.png"
+                  style={{ width: "250px", marginLeft: "110px" }}
+                ></img>
+                <div className="mt-3 my-3 ml-3 mr-3">
+                  {!success && (
+                    <Alert variant={"danger"}>
+                      Incorrect username or password!
+                    </Alert>
+                  )}
+                  <Form
+                    onSubmit={(e) => {
+                      login(e);
+                    }}
+                  >
+                    <Form.Group controlId="formBasicEmail">
+                      <Form.Label>Username</Form.Label>
+                      <Form.Control
+                        type="text"
+                        placeholder="Enter username"
+                        value={credentials.username}
+                        onChange={(e) => setData({ username: e.target.value })}
+                      />
+                    </Form.Group>
+    
+                    <Form.Group controlId="formBasicPassword">
+                      <Form.Label>Password</Form.Label>
+                      <Form.Control
+                        type="password"
+                        placeholder="Password"
+                        value={credentials.password}
+                        onChange={(e) => setData({ password: e.target.value })}
+                      />
+                    </Form.Group>
+    
+                    <div className={"d-flex justify-content-between"}>
+                      <Button variant="primary" type="submit">
+                        Submit
+                      </Button>
+                      <Nav.Link as={Link} to={"/register"} className={"py-0"}>
+                        <span>Sign Up</span>
+                      </Nav.Link>
+                    </div>
+                  </Form>
                 </div>
-            </Container>
+              </Col>
+            </Row>
+          </Container>
         );
     }
 }

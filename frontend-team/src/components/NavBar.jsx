@@ -6,9 +6,6 @@ import { BsChatSquareDots } from 'react-icons/bs'
 import { AiOutlineBell } from 'react-icons/ai'
 import { Link, withRouter } from 'react-router-dom'
 
-
-
-
 class NavBar extends Component {
 
   render() {

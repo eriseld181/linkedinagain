@@ -1,8 +1,8 @@
 import React from 'react'
 import { Row, Col, Image, Container } from 'react-bootstrap'
-import { AiOutlineQuestionCircle } from 'react-icons/ai'
+//import { AiOutlineQuestionCircle } from 'react-icons/ai'
 import './MainCss.css'
-import { Link } from 'react-router-dom'
+//import { Link } from 'react-router-dom'
 
 class Network extends React.Component {
 

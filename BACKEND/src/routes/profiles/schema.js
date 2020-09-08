@@ -46,10 +46,19 @@ const ProfileSchema = new Schema(
       // required: true,
       //   unique: true,
     },
+    refreshTokens: [
+      {
+        token: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
     googleId: { type: String }
     //in case of error, waiting to finish oauth
   },
   { timestamps: true }
+
 );
 
 const ProfileModel = model("profiles", ProfileSchema);

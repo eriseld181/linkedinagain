@@ -8,6 +8,7 @@ const ProfileSchema = new Schema(
       type: String,
       // required: true,
     },
+    password: { type: String },
     surname: {
       type: String,
       // required: true,
@@ -45,6 +46,8 @@ const ProfileSchema = new Schema(
       // required: true,
       //   unique: true,
     },
+    googleId: { type: String, required: true }
+    //in case of error, waiting to finish oauth
   },
   { timestamps: true }
 );

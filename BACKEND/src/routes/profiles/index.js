@@ -10,6 +10,25 @@ const profileRouter = express.Router();
 const upload = multer();
 const port = process.env.PORT;
 const imagePath = path.join(__dirname, "../../../public/image/profile");
+const passport = require("passport")
+
+
+profileRouter.get("/googleLogin", passport.authenticate("google",
+  { scope: ["profile", "email"] }))
+
+profileRouter.get("/googleRedirect", passport.authenticate("google"),
+  async (req, res, next) => {
+    try {
+      res.send("OK")
+    } catch (error) {
+
+    }
+  }
+)
+
+
+
+
 
 profileRouter.post("/login", async (req, res, next) => {
   try {
@@ -155,5 +174,6 @@ profileRouter.get("/:username/cv", async (req, res, next) => {
     next(error);
   }
 });
+
 
 module.exports = profileRouter;

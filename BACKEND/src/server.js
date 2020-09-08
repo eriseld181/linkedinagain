@@ -22,7 +22,7 @@ const oauth = require("../src/routes/profiles/oauth")
 //     newlyDefinedErrorHandler,
 //   } = require("./errorHandler")
 
-
+server.use(passport.initialize())
 server.use(express.static(staticFolderPath))
 server.use(express.json())
 
@@ -32,7 +32,7 @@ server.use("/post", post)
 server.use("/profiles", profileRouter)
 server.use("/experiences", experienceRouter)
 server.use("/user", authorizeRoutes);
-server.use(passport.initialize())
+
 
 server.use(badRequestHandler)
 server.use(notFoundHandler)

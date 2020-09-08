@@ -13,18 +13,6 @@ const imagePath = path.join(__dirname, "../../../public/image/profile");
 const passport = require("passport")
 
 
-profileRouter.get("/googleLogin", passport.authenticate("google",
-  { scope: ["profile", "email"] }))
-
-profileRouter.get("/googleRedirect", passport.authenticate("google"),
-  async (req, res, next) => {
-    try {
-      res.send("OK")
-    } catch (error) {
-
-    }
-  }
-)
 
 
 
@@ -54,6 +42,19 @@ profileRouter.post("/login", async (req, res, next) => {
     next(error);
   }
 });
+
+//Redirect to the google api logn page. It shows the login with google/
+profileRouter.get("/googleLogin", passport.authenticate("google",
+  { scope: ["profile", "email"] }))
+
+profileRouter.get("/googleRedirect", passport.authenticate("google"),
+  async (req, res, next) => {
+
+    res.send("OK")
+  }
+
+)
+
 
 profileRouter.get("/", async (req, res, next) => {
   try {
@@ -174,6 +175,7 @@ profileRouter.get("/:username/cv", async (req, res, next) => {
     next(error);
   }
 });
+
 
 
 module.exports = profileRouter;

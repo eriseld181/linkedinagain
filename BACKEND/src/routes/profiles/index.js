@@ -11,13 +11,20 @@ const upload = multer();
 const port = process.env.PORT;
 const imagePath = path.join(__dirname, "../../../public/image/profile");
 const passport = require("passport")
+const { authenticate } = require("./oauthTools")
+//-------------------------------------------------------------------
+profileRouter.get('/auth/facebook',
+  passport.authenticate('facebook'));
+
+profileRouter.get('/login',
+  passport.authenticate('facebook', { failureRedirect: '/login' }),
+  function (req, res) {
+    // Successful authentication, redirect home.
+    res.redirect('/');
+  });
 
 
-
-
-
-
-
+//-------------------------------------------------------------------
 profileRouter.post("/login", async (req, res, next) => {
   try {
     const { email, password } = req.body;
@@ -49,10 +56,12 @@ profileRouter.get("/googleLogin", passport.authenticate("google",
 
 profileRouter.get("/googleRedirect", passport.authenticate("google"),
   async (req, res, next) => {
+    try {
+      res.send("OK")
+    } catch (error) {
 
-    res.send("OK")
+    }
   }
-
 )
 
 

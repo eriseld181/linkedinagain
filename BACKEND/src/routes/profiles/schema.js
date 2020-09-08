@@ -54,7 +54,8 @@ const ProfileSchema = new Schema(
         },
       },
     ],
-    googleId: { type: String }
+    googleId: { type: String },
+    linkedinAuthId: { type: String }
     //in case of error, waiting to finish oauth
   },
   { timestamps: true }

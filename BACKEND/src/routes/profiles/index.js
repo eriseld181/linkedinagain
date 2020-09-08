@@ -12,6 +12,26 @@ const port = process.env.PORT;
 const imagePath = path.join(__dirname, "../../../public/image/profile");
 const passport = require("passport")
 const { authenticate } = require("./oauthTools")
+
+//linkedin login
+profileRouter.get("/linkedinLogin", passport.authenticate("linkedin"));
+
+profileRouter.get(
+  "/linkedin/callback",
+  passport.authenticate("linkedin", { failureRedirect: "/login" }),
+  function (req, res) {
+    const { profile } = req.profile;
+    res.cookie("accessToken", tokens.token, {
+      path: "/",
+    });
+
+    res.cookie("refreshToken", tokens.refreshToken, {
+      path: ["/users/refreshToken", "/users/logout"],
+    });
+
+    res.redirect(`http://localhost:3000`);
+  }
+);
 //-------------------------------------------------------------------
 profileRouter.get('/auth/facebook',
   passport.authenticate('facebook'));

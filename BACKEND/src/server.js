@@ -40,7 +40,7 @@ io.on("connection", (socket) => {
 
             const welcomeMessage = {
                 sender: "Admin",
-                text: `Welcome to ${room} channel`,
+                text: `Welcome to ${room}`,
                 createdAt: new Date(),
             }
 
@@ -48,7 +48,7 @@ io.on("connection", (socket) => {
 
             const messageToRoomMembers = {
                 sender: "Admin",
-                text: `${username} has joined!`,
+                text: `${username} is online!`,
                 createdAt: new Date(),
             }
 
@@ -64,7 +64,7 @@ io.on("connection", (socket) => {
         }
     })
 
-    socket.on("sendMessage", async ({ text, room }) => {
+    socket.on("chat", async ({ text, room }) => {
         console.log(text, room)
         try {
             const user = await getUser(room, socket.id)
@@ -88,7 +88,7 @@ io.on("connection", (socket) => {
         }
     })
 
-    socket.on("leaveRoom", async ({ room }) => {
+    socket.on("leave", async ({ room }) => {
         try {
             const user = await removeUser(socket.id, room)
             const message = {

@@ -110,6 +110,10 @@ io.on("connection", (socket) => {
         }
     })
 })
+const authorizeRoutes = require("./routes/authorization");
+
+const passport = require("passport")
+const oauth = require("../src/routes/profiles/oauth")
 
 // const {
 //     notFoundHandler,
@@ -127,6 +131,8 @@ server.use(cors())
 server.use("/post", post)
 server.use("/profiles", profileRouter)
 server.use("/experiences", experienceRouter)
+server.use("/user", authorizeRoutes);
+server.use(passport.initialize())
 
 server.use(badRequestHandler)
 server.use(notFoundHandler)

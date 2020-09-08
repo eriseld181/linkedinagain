@@ -46,10 +46,22 @@ const ProfileSchema = new Schema(
       // required: true,
       //   unique: true,
     },
-    googleId: { type: String }
+
+    refreshTokens: [
+      {
+        token: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
+    googleId: { type: String },
+    linkedinAuthId: { type: String }
+
     //in case of error, waiting to finish oauth
   },
   { timestamps: true }
+
 );
 
 const ProfileModel = model("profiles", ProfileSchema);

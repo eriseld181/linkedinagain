@@ -6,6 +6,8 @@ import Footer from "./components/Footer"
 import Feed from './components/Feed'
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 import Network from './components/Network'
+import Register from './components/Register';
+import Login from './components/Login'
 
 class App extends Component {
 
@@ -18,13 +20,8 @@ class App extends Component {
   }
 
   fetchUser = async () => {
-    // await fetch("https://striveschool.herokuapp.com/api/profile/", {
-    //   headers: new Headers({
-    //     'Authorization': 'Basic ' + this.props.authoKey,
-    //     "Content-Type": "application/json",
-    //   }),
-    // })
-    await fetch("https://linkedin-team.herokuapp.com/profiles")
+   
+    await fetch("http://localhost:4000/user")
       .then(resp => resp.json())
       .then(respObj => this.setState({
         users: respObj.data
@@ -124,6 +121,7 @@ class App extends Component {
                 getUserImg={this.getUserImg} />}
             />
             <Route path="/network" exact component={Network} />
+            <Register />
 
             <Footer />
           </Container>

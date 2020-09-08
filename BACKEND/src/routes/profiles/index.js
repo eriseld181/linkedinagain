@@ -11,8 +11,49 @@ const upload = multer();
 const port = process.env.PORT;
 const imagePath = path.join(__dirname, "../../../public/image/profile");
 const passport = require("passport")
+const { authenticate } = require("./oauthTools")
+
+//linkedin login
+
+profileRouter.get('/linkedinLogin', passport.authenticate('linkedin'),
+
+  profileRouter.get('/linkedinRedirect', passport.authenticate('linkedin', {
+
+    failureRedirect: '/login'
+  }),
+    async (req, res, next) => {
+      try {
+        const user = req.user;
+        res.send('user', user);
+
+        // res.status(200).redirect('/');
+        res.status(200).send('Done');
+      } catch (error) {
+        console.log(error);
+        next(error);
+      }
+    }
+  ))
 
 
+// profileRouter.get(
+//   "/linkedin",
+//   passport.authenticate("linkedin", { failureRedirect: "/login" }),
+//   function (req, res) {
+//     const { profile } = req.profile;
+//     res.cookie("accessToken", tokens.token, {
+//       path: "/",
+//     });
+
+//     res.cookie("refreshToken", tokens.refreshToken, {
+//       path: ["/users/refreshToken", "/users/logout"],
+//     });
+
+//     res.redirect(`http://localhost:3000`);
+//   }
+// );
+//-------------------------------------------------------------------
+//Redirect to the google api logn page. It shows the login with google/
 profileRouter.get("/googleLogin", passport.authenticate("google",
   { scope: ["profile", "email"] }))
 
@@ -25,11 +66,7 @@ profileRouter.get("/googleRedirect", passport.authenticate("google"),
     }
   }
 )
-
-
-
-
-
+//-------------------------------------------------------------------
 profileRouter.post("/login", async (req, res, next) => {
   try {
     const { email, password } = req.body;
@@ -54,6 +91,8 @@ profileRouter.post("/login", async (req, res, next) => {
     next(error);
   }
 });
+
+
 
 profileRouter.get("/", async (req, res, next) => {
   try {
@@ -174,6 +213,7 @@ profileRouter.get("/:username/cv", async (req, res, next) => {
     next(error);
   }
 });
+
 
 
 module.exports = profileRouter;

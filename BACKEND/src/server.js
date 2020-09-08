@@ -9,6 +9,8 @@ const profileRouter = require('./routes/profiles')
 const port = process.env.PORT
 const experienceRouter = require("./routes/experience")
 const post = require("./routes/post")
+const authorizeRoutes = require("./routes/authorization");
+
 const server = express()
 
 
@@ -29,6 +31,7 @@ server.use(cors())
 server.use("/post", post)
 server.use("/profiles", profileRouter)
 server.use("/experiences", experienceRouter)
+server.use("/user", authorizeRoutes);
 
 server.use(badRequestHandler)
 server.use(notFoundHandler)

@@ -2,7 +2,7 @@ const passport = require('passport')
 const GoogleStrategy = require("passport-google-oauth20").Strategy
 const UserModel = require("./schema")
 const LinkedInStrategy = require('passport-linkedin-oauth2').Strategy;
-
+//google oAuth
 passport.use("google", new GoogleStrategy({
     clientID: "290275464460-tsn2bahpfqmp6parsbpn1regv2a19o7d.apps.googleusercontent.com",
     clientSecret: "E1MoDYImyIKM5bX8UmBLwG97",
@@ -30,42 +30,41 @@ passport.use("google", new GoogleStrategy({
         console.log(error)
     }
 }))
-
+//Linkedin oAuth
 passport.use("linkedin", new LinkedInStrategy({
-    clientID: "78qfi0wkw2hczg",
-    clientSecret: "n8uLpIX5kWR2ZKL0",
-    callbackURL: "http://localhost:4000/profiles/Linkedin",
-    scope: ['r_emailaddress', 'r_basicprofile'],
+    clientID: process.env.LINKEDIN_KEY,
+    clientSecret: process.env.LINKEDIN_SECRET,
+    callbackURL: "http://localhost:4000/auth/linkedinRediret",
+    scope: ['r_emailaddress', 'r_liteprofile'],
 
-}, async function (accessToken, refreshToken, profile, done) {
-    console.log(profile)
-    const { emails, name, id, surname } = profile;
+}, async function (profile, done) {
 
-    const newUser = {
-        email: emails[0].value,
-        name: name.givenName,
-        surname: name.familyName,
-        refreshTokens: [],
-        // image: photos[0].value,
-        linkedinAuthId: id,
-        //password: id,
+
+
+    const User = {
+        linkedinId: profile.id,
+        name: profile.name.givenName,
+        surname: profile.name.familyName,
+        //  bio: ' ',
+        // title: ' ',
+        // area: ' ',
+        //  image: profile.photos[3].value,
+        email: profile.emails[0].value,
+        username: profile.emails[0].value,
     };
 
     try {
-        const user =
-            (await UserModel.findOne({ linkedinAuthId: id })) ||
-            (await UserModel.create(newUser));
-
-        const tokens = await generateTokenPair(user);
-
-        done(null, { user, tokens });
+        const user = await UserModel.findOne({ googleId: profile.id })
+        if (user) {
+            done(null, user)
+        } else {
+            const createdUser = await UserModel.create(newUser)
+            done(null, createdUser)
+        }
     } catch (error) {
-        console.log(error);
-        done(error);
+        console.log(error)
     }
-}
-)
-);
+}))
 
 
 

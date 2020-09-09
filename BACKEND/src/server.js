@@ -10,7 +10,7 @@ const port = process.env.PORT
 const experienceRouter = require("./routes/experience")
 const post = require("./routes/post")
 const authorizeRoutes = require("./routes/authorization");
-
+const cookieParser = require("cookie-parser")
 const server = express()
 const passport = require("passport")
 const oauth = require("../src/routes/profiles/oauth")
@@ -25,13 +25,14 @@ const oauth = require("../src/routes/profiles/oauth")
 server.use(passport.initialize())
 server.use(express.static(staticFolderPath))
 server.use(express.json())
-
+server.use(cookieParser())
 server.use(cors())
 
 server.use("/post", post)
 server.use("/profiles", profileRouter)
 server.use("/experiences", experienceRouter)
 server.use("/user", authorizeRoutes);
+
 
 
 server.use(badRequestHandler)

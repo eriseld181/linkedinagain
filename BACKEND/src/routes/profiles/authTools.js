@@ -8,7 +8,7 @@ const refreshToken = async (oldRefreshToken) => {
     const user = await User.findOne({ _id: decoded._id })
 
     if (!user) {
-        throw new Error(`Access is forbidden`)
+        throw new Error(`Access Denied ek`)
     }
 
     const currentRefreshToken = user.refreshTokens.find(
@@ -16,7 +16,7 @@ const refreshToken = async (oldRefreshToken) => {
     )
 
     if (!currentRefreshToken) {
-        throw new Error(`Refresh token is wrong`)
+        throw new Error(`Refresh token is wrong ek`)
     }
 
     // generate tokens
@@ -56,7 +56,7 @@ const generateJWT = (payload) =>
         jwt.sign(
             payload,
             process.env.JWT_SECRET,
-            { expiresIn: "30s" },
+            { expiresIn: "900" },
             (err, token) => {
                 if (err) rej(err)
                 res(token)
@@ -71,6 +71,7 @@ const verifyJWT = (token) =>
             res(decoded)
         })
     )
+
 
 const generateRefreshJWT = (payload) =>
     new Promise((res, rej) =>

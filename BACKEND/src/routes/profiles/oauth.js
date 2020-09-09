@@ -2,6 +2,7 @@ const passport = require('passport')
 const GoogleStrategy = require("passport-google-oauth20").Strategy
 const UserModel = require("./schema")
 const LinkedInStrategy = require('passport-linkedin-oauth2').Strategy;
+const { authenticate } = require("./authTools")
 //google oAuth
 passport.use("google", new GoogleStrategy({
     clientID: "290275464460-tsn2bahpfqmp6parsbpn1regv2a19o7d.apps.googleusercontent.com",
@@ -21,10 +22,12 @@ passport.use("google", new GoogleStrategy({
     try {
         const user = await UserModel.findOne({ googleId: profile.id })
         if (user) {
-            done(null, user)
+            const tokens = await authenticate(user)
+            done(null, tokens)
         } else {
-            const createdUser = await UserModel.create(newUser)
-            done(null, createdUser)
+            createdUser = await UserModel.create(newUser)
+            const tokens = await authenticate(createdUser)
+            done(null, { user, tokens })
         }
     } catch (error) {
         console.log(error)

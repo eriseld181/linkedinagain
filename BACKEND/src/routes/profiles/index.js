@@ -13,18 +13,18 @@ const imagePath = path.join(__dirname, "../../../public/image/profile");
 const passport = require("passport")
 const { authenticate, refreshToken } = require("./authTools")
 const { authorize } = require("./authorize")
-//linkedin login
+//-------------------------------------------------------------------
+//linkedin login with oAuth
+profileRouter.get("/linkedinLogin", passport.authenticate("linkedin"),
 
-profileRouter.get('/linkedinLogin', passport.authenticate('linkedin'),
+  profileRouter.get("/linkedinRedirect", passport.authenticate("linkedin", {
 
-  profileRouter.get('/linkedinRedirect', passport.authenticate('linkedin', {
-
-    failureRedirect: '/login'
+    failureRedirect: "/login"
   }),
     async (req, res, next) => {
       try {
         const user = req.user;
-        res.send('user', user);
+        res.send("ok");
 
         // res.status(200).redirect('/');
         res.status(200).send('Done');
@@ -46,6 +46,20 @@ profileRouter.get("/googleRedirect", passport.authenticate("google"),
     } catch (error) {
     }
   })
+//-------------------------------------------------------------------
+//Facebook login with oAuth
+profileRouter.get('/facebookLogin',
+  passport.authenticate('facebook'));
+
+profileRouter.get('/facebookRedirect',
+  passport.authenticate('facebook', { failureRedirect: '/login' }),
+  function (req, res) {
+    // Successful authentication, redirect home.
+    res.redirect('/');
+  });
+
+
+
 //-------------------------------------------------------------------
 //Register to linkedin page => http://localhost:4000/profiles/register
 profileRouter.post("/register", async (req, res, next) => {

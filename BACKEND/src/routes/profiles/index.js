@@ -11,46 +11,31 @@ const upload = multer();
 const port = process.env.PORT;
 const imagePath = path.join(__dirname, "../../../public/image/profile");
 const passport = require("passport")
-const { authenticate } = require("./oauthTools")
-//-------------------------------------------------------------------
-profileRouter.get('/auth/facebook',
-  passport.authenticate('facebook'));
+const { authenticate, refreshToken } = require("./authTools")
+const { authorize } = require("./authorize")
+//linkedin login
 
-profileRouter.get('/login',
-  passport.authenticate('facebook', { failureRedirect: '/login' }),
-  function (req, res) {
-    // Successful authentication, redirect home.
-    res.redirect('/');
-  });
+profileRouter.get('/linkedinLogin', passport.authenticate('linkedin'),
 
+  profileRouter.get('/linkedinRedirect', passport.authenticate('linkedin', {
 
-//-------------------------------------------------------------------
-profileRouter.post("/login", async (req, res, next) => {
-  try {
-    const { email, password } = req.body;
-    const user = await UserModel.findOne({ email });
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      const err = new Error("Unable to login");
-      err.httpStatusCode = 401;
-      throw err;
-    }
-    const tokens = jwt.sign(
-      payload,
-      process.env.JWT_SECRET,
-      { expiresIn: "15 week" },
-      (err, token) => {
-        if (err) rej(err);
-        res(token);
+    failureRedirect: '/login'
+  }),
+    async (req, res, next) => {
+      try {
+        const user = req.user;
+        res.send('user', user);
+
+        // res.status(200).redirect('/');
+        res.status(200).send('Done');
+      } catch (error) {
+        console.log(error);
+        next(error);
       }
-    );
-    res.send(tokens);
-  } catch (error) {
-    next(error);
-  }
-});
-
-//Redirect to the google api logn page. It shows the login with google/
+    }
+  ))
+//-------------------------------------------------------------------
+//Redirect to the google api login page. It shows the login with google/
 profileRouter.get("/googleLogin", passport.authenticate("google",
   { scope: ["profile", "email"] }))
 
@@ -59,36 +44,10 @@ profileRouter.get("/googleRedirect", passport.authenticate("google"),
     try {
       res.send("OK")
     } catch (error) {
-
     }
-  }
-)
-
-
-profileRouter.get("/", async (req, res, next) => {
-  try {
-    const query = q2m(req.query);
-    console.log(query);
-    const users = await ProfileModel.find(query.criteria, query.options.fields)
-      .skip(query.options.skip)
-      .limit(query.options.limit)
-      .sort(query.options.sort);
-    res.send({ totalUsers: users.length, data: users });
-  } catch (error) {
-    next(error);
-  }
-});
-
-profileRouter.get("/:username", async (req, res, next) => {
-  try {
-    const user = await ProfileModel.findOne({ username: req.params.username });
-    if (user) {
-      res.status(200).send(user);
-    } else res.status(404).send("not found!");
-  } catch (error) {
-    next(error);
-  }
-});
+  })
+//-------------------------------------------------------------------
+//Register to linkedin page => http://localhost:4000/profiles/register
 profileRouter.post("/register", async (req, res, next) => {
   try {
     let newUser = await new ProfileModel({
@@ -103,18 +62,59 @@ profileRouter.post("/register", async (req, res, next) => {
     next(error);
   }
 });
+//-------------------------------------------------------------------
+//Login to linkedin page
 
-profileRouter.post("/", async (req, res, next) => {
+profileRouter.post("/login", async (req, res, next) => {
   try {
-    const newUser = new ProfileModel(req.body);
-    const { _id } = await newUser.save();
-    res.status(200).send(_id);
+    console.log(req.body)
+    const { email, password } = req.body
+    const user = await ProfileModel.findByCredentials(email, password)
+    const tokens = await authenticate(user)
+    res.send(tokens)
+  } catch (error) {
+    console.log(error)
+    next(error)
+  }
+})
+//-------------------------------------------------------------------
+//Receives all the users together => http://localhost:4000/profiles
+profileRouter.get("/", authorize, async (req, res, next) => {
+  try {
+    const query = q2m(req.query);
+    console.log(query);
+    const users = await ProfileModel.find(query.criteria, query.options.fields)
+      .skip(query.options.skip)
+      .limit(query.options.limit)
+      .sort(query.options.sort);
+    res.send({ totalUsers: users.length, data: users });
   } catch (error) {
     next(error);
   }
 });
-
-profileRouter.put("/:username", async (req, res, next) => {
+//-------------------------------------------------------------------
+//Receive a single user => http://localhost:4000/eriseld
+profileRouter.get("/:username", authorize, async (req, res, next) => {
+  try {
+    const user = await ProfileModel.findOne({ username: req.params.username });
+    if (user) {
+      res.status(200).send(user);
+    } else res.status(404).send("not found!");
+  } catch (error) {
+    next(error);
+  }
+});
+profileRouter.delete("/:username", authorize, async (req, res, next) => {
+  try {
+    await req.user.remove()
+    res.send("Deleted")
+  } catch (error) {
+    next(error)
+  }
+})
+//-------------------------------------------------------------------
+//What is this?
+profileRouter.put("/:username", authorize, async (req, res, next) => {
   try {
     const user = await ProfileModel.findOneAndUpdate(
       { username: req.params.username },
@@ -133,7 +133,8 @@ profileRouter.put("/:username", async (req, res, next) => {
     next(error);
   }
 });
-
+//-------------------------------------------------------------------
+//What is this?
 profileRouter.post(
   "/:username/picture",
   upload.single("user"),
@@ -165,7 +166,8 @@ profileRouter.post(
     }
   }
 );
-
+//-------------------------------------------------------------------
+//What is this?
 profileRouter.get("/:username/cv", async (req, res, next) => {
   try {
     const source = fs.createReadStream(
@@ -184,7 +186,5 @@ profileRouter.get("/:username/cv", async (req, res, next) => {
     next(error);
   }
 });
-
-
 
 module.exports = profileRouter;

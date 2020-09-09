@@ -1,88 +1,154 @@
 import React from "react";
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import { Table, Form, Col, Row, Button, Container } from "react-bootstrap";
+import { Link, withRouter } from 'react-router-dom'
+import Navbar from "./NavBar"
 
-function Register(props) {
-  const { credentials, register, setData } = props;
-  const mystyle = {
-    border: "1px solid black",
-    backgroundColor: "whitesmoke",
-    padding: "10px",
-    fontFamily: "Arial",
-    marginBottom: "10rem",
-  };
-  return (
-    <div>
-      <Container className="my-5">
-        <Row>
-          <Col md={3}></Col>
-          <Col md={6} className="mt-5" style={mystyle}>
-            <img
-              src="https://logos-world.net/wp-content/uploads/2020/04/Linkedin-Logo-2003%E2%80%932011.png"
-              style={{ width: "250px", marginLeft: "110px" }}
-            ></img>
-            <div className="mt-3 my-3 ml-3 mr-3">
-              <Form
-                onSubmit={(e) => {
-                  register(e);
-                }}
-              >
-                <Form.Group controlId="formBasicEmail">
-                  <Form.Label>First Name</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Enter name"
-                    value={credentials.name}
-                    onChange={(e) => setData({ name: e.target.value })}
-                  />
-                </Form.Group>
-                <Form.Group controlId="formBasicEmail">
-                  <Form.Label>Last Name</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Enter last name"
-                    value={credentials.surname}
-                    onChange={(e) => setData({ surname: e.target.value })}
-                  />
-                </Form.Group>
-                <Form.Group controlId="formBasicEmail">
-                  <Form.Label>Username</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Enter username"
-                    value={credentials.username}
-                    onChange={(e) => setData({ username: e.target.value })}
-                  />
-                </Form.Group>
-                <Form.Group controlId="formBasicEmail">
-                  <Form.Label>Email address</Form.Label>
-                  <Form.Control
-                    type="email"
-                    placeholder="Enter email"
-                    value={credentials.email}
-                    onChange={(e) => setData({ email: e.target.value })}
-                  />
-                </Form.Group>
 
-                <Form.Group controlId="formBasicPassword">
-                  <Form.Label>Password</Form.Label>
-                  <Form.Control
-                    type="password"
-                    placeholder="Password"
-                    value={credentials.password}
-                    onChange={(e) => setData({ password: e.target.value })}
-                  />
-                </Form.Group>
+class Register extends React.Component {
+    state = {
+        showUser: false,
+        show: false,
+        person: {
+            name: '',
+            surname: '',
+            email: '',
+            password: '',
+            confirmPassword: '',
+        }
+    }
 
-                <Button variant="primary" type="submit">
-                  Submit
-                </Button>
-              </Form>
-            </div>
-          </Col>
-        </Row>
-      </Container>
-    </div>
-  );
+    componentDidUpdate = () => {
+        if (
+            this.state.show === false &&
+            this.state.person.name.length > 2 &&
+            this.state.person.surname.length > 3 &&
+            this.state.person.email.includes("@") &&
+            this.state.person.password.length >= 8 &&
+            this.state.person.confirmPassword === this.state.person.password
+        ) {
+            this.setState({
+                show: !this.state.show
+            });
+        }
+    }
+
+    handleSubmit = (e) => {
+        e.preventDefault()
+        this.setState({
+            showUser: !this.state.showUser
+        });
+    }
+
+    updatePerson = (event) => {
+        let person = this.state.person
+        person[event.currentTarget.id] = event.currentTarget.value
+
+        this.setState({
+            person
+        });
+    }
+    render() {
+        return (
+            <div>
+                <Container style={{ height: "90vh", width: "60vh", marginTop: "100px" }}>
+                    <Row className="d-flex justfify-content-center mt-5" style={{ border: "1px solid black", height: "500px", backgroundColor: "white" }}>
+                        <Col md={6} className="offset-3">
+                            <h3 className="text-center mt-3">Get started, it's free!</h3>
+                            <Form onSubmit={this.handleSubmit}>
+                                <Row>
+                                    <Col>
+                                        <Form.Group>
+                                            <Form.Label>First name</Form.Label>
+                                            <Form.Control
+                                                type="text"
+                                                id="name"
+                                                placeholder="Name"
+                                                value={this.state.person.name}
+                                                onChange={this.updatePerson}
+                                                required
+                                            />
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col>
+                                        <Form.Group>
+                                            <Form.Label>Last name</Form.Label>
+                                            <Form.Control
+                                                type="text"
+                                                id="surname"
+                                                placeholder="Surname"
+                                                value={this.state.person.surname}
+                                                onChange={this.updatePerson}
+                                                required
+                                            />
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col>
+                                        <Form.Group>
+                                            <Form.Label>Email</Form.Label>
+                                            <Form.Control
+                                                type="email"
+                                                id="email"
+                                                placeholder="Email"
+                                                value={this.state.person.email}
+                                                onChange={this.updatePerson}
+                                                required
+                                            />
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col>
+                                        <Form.Group>
+                                            <Form.Label>Password</Form.Label>
+                                            <Form.Control
+                                                type="password"
+                                                id="password"
+                                                placeholder="Password"
+                                                value={this.state.person.password}
+                                                onChange={this.updatePerson}
+                                                required
+                                            />
+                                        </Form.Group>
+                                    </Col>
+
+                                </Row>
+
+                                {this.state.show ||
+                                    <Button  type="submit" style={{width: "240px", height: "40px"}}>
+                                         <Link to="/feedPosts" >
+                                                <p style={{color: "white"}}>Join now</p>
+                                         </Link>
+                                    </Button>
+                                }
+                            </Form>
+                            {this.state.showUser ?
+                                <>
+                                    <Row className="d-flex justfify-content-center mt-3">
+                                        <Col>
+                                           <h5>The user has joined</h5>
+                                          
+                                        </Col>
+                                    </Row>
+                                </>
+                                :
+                                <Row className="d-flex justfify-content-center">
+                                    <Col className="text-center" >
+                                       
+                                    </Col>
+                                </Row>
+                            }
+                        </Col>
+
+
+                    </Row>
+                </Container>
+            </div >
+        );
+    }
 }
 
 export default Register;

@@ -73,9 +73,6 @@ class NavBar extends Component {
                     <FaVideo />
                     Learning
                   </Link>
-                  <Link to="/register" className="nav-link">
-                            Register
-                        </Link>
 
                 </Nav>
 

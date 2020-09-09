@@ -119,7 +119,7 @@ class Register extends React.Component {
 
                                 {this.state.show ||
                                     <Button  type="submit" style={{width: "240px", height: "40px"}}>
-                                         <Link to="/feedPosts" >
+                                         <Link to="/feed" >
                                                 <p style={{color: "white"}}>Join now</p>
                                          </Link>
                                     </Button>

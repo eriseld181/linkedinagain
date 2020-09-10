@@ -121,7 +121,7 @@ class App extends Component {
                 getUserImg={this.getUserImg} />}
             />
             <Route path="/network" exact component={Network} />
-            <Register />
+            <Route path="/register" exact component={Register}></Route>
 
             <Footer />
           </Container>

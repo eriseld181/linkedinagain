@@ -4,7 +4,7 @@ const UserModel = require("./schema")
 const LinkedInStrategy = require('passport-linkedin-oauth2').Strategy;
 const FacebookStrategy = require("passport-facebook").Strategy;
 const { authenticate } = require("./authTools")
-//google oAuth
+//google oAuth 
 passport.use("google", new GoogleStrategy({
     clientID: "290275464460-tsn2bahpfqmp6parsbpn1regv2a19o7d.apps.googleusercontent.com",
     clientSecret: "E1MoDYImyIKM5bX8UmBLwG97",
@@ -44,6 +44,7 @@ passport.use("linkedin", new LinkedInStrategy({
     scope: ['r_emailaddress', 'r_liteprofile'],
 
 }, async (request, accessToken, refreshToken, profile, done) => {
+    console.log(profile)
     const newUser = {
         linkedinId: profile.id,
         name: profile.givenName,
@@ -89,30 +90,31 @@ passport.use("facebook", new FacebookStrategy({
     ],
 },
     async (request, accessToken, refreshToken, profile, done) => {
-        // const newUser = {
-        //     facebookId: profile.id,
-        //     name: profile.name.givenName,
-        //     surname: profile.name.familyName,
-        //     email: profile.emails[0].value,
-        //     username: profile.emails[0].value,
-        //     //  bio: ' ',
-        //     title: ' ',
-        //     area: ' ',
-        //     refreshTokens: [],
-        //}
+        const newUser = {
+            facebookId: profile.id,
+            name: profile.name.givenName,
+            surname: profile.name.familyName,
+            // email: profile.emails[0].value,
+            username: profile.emails[0].value,
+            //  bio: ' ',
+            title: ' ',
+            area: ' ',
+            refreshTokens: [],
+        }
         try {
             console.log(profile)
-            // const user = await UserModel.findOne({ facebookId: profile.id })
-            // console.log(user)
-            // if (user) {
-            //     done(null, user)
-            // } else {
-            //     const createdUser = new UserModel(newUser)
-            //     await createdUser.save()
-            //     const token = await authenticate(createdUser)
+            console.log(newUser)
+            const user = await UserModel.findOne({ facebookId: profile.id })
+            console.log(user)
+            if (user) {
+                done(null, user)
+            } else {
+                const createdUser = new UserModel(newUser)
+                await createdUser.save()
+                const token = await authenticate(createdUser)
 
-            //     done(null, { createdUser, token })
-            // }
+                done(null, { createdUser, token })
+            }
         } catch (error) {
             console.log(error)
         }

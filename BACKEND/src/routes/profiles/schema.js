@@ -62,28 +62,22 @@ const ProfileSchema = new Schema(
   { timestamps: true }
 
 );
-ProfileSchema.methods.toJSON = function () {
-  const user = this
-  const userObject = user.toObject()
 
-  delete userObject.password
-  delete userObject.__v
-
-  return userObject
-}
 
 ProfileSchema.statics.findByCredentials = async (email, password) => {
   const user = await ProfileModel.findOne({ email })
 
   const isMatch = await bcrypt.compare(password, user.password)
 
-  if (!isMatch) {
+  console.log(user.email)
+  if (!isMatch) return user
+  else {
     const err = new Error("Unable to login")
     err.httpStatusCode = 401
     throw err
   }
 
-  return user
+
 }
 ProfileSchema.pre("save", async function (next) {
   const user = this
@@ -112,6 +106,15 @@ ProfileSchema.post("save", function (error, doc, next) {
     next()
   }
 })
+ProfileSchema.methods.toJSON = function () {
+  const user = this
+  const userObject = user.toObject()
+
+  delete userObject.password
+  delete userObject.__v
+
+  return userObject
+}
 
 const ProfileModel = model("profiles", ProfileSchema);
 module.exports = ProfileModel;

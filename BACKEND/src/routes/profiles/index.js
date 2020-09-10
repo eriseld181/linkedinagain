@@ -49,7 +49,7 @@ profileRouter.get("/googleRedirect", passport.authenticate("google"),
 //-------------------------------------------------------------------
 //Facebook login with oAuth
 profileRouter.get('/facebookLogin',
-  passport.authenticate('facebook'));
+  passport.authenticate('facebook', { scope: ["email"] }));
 
 profileRouter.get('/facebookRedirect',
   passport.authenticate('facebook', { failureRedirect: '/login' }),
@@ -79,15 +79,36 @@ profileRouter.post("/register", async (req, res, next) => {
 //-------------------------------------------------------------------
 //Login to linkedin page
 
+// profileRouter.post("/login", async (req, res, next) => {
+//   try {
+
+//     const { email, password } = req.body
+//     console.log("reqqqq", req.body)
+//     const user = await ProfileModel.findByCredentials(email, password)
+//     const tokens = await authenticate(user)
+//     res.send(tokens)
+//   } catch (error) {
+//     console.log(error)
+//     next(error)
+//   }
+// })
 profileRouter.post("/login", async (req, res, next) => {
   try {
-    console.log(req.body)
     const { email, password } = req.body
     const user = await ProfileModel.findByCredentials(email, password)
-    const tokens = await authenticate(user)
-    res.send(tokens)
+    const { token, refreshToken } = await authenticate(user)
+    res.cookie("accessToken", token, {
+      path: "/",
+      httpOnly: true,
+      sameSite: true,
+    })
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      path: "/users/refreshToken",
+      sameSite: true,
+    })
+    res.send({ token, refreshToken })
   } catch (error) {
-    console.log(error)
     next(error)
   }
 })

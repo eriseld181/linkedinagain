@@ -56,32 +56,51 @@ const ProfileSchema = new Schema(
       },
     ],
     googleId: { type: String },
-    linkedinId: { type: String }
+    linkedinId: { type: String },
+    facebookId: { type: String },
     //in case of error, waiting to finish oauth
   },
   { timestamps: true }
 
 );
 
-
 ProfileSchema.statics.findByCredentials = async (email, password) => {
+  console.log(email)
   const user = await ProfileModel.findOne({ email })
+  console.log(user)
 
   const isMatch = await bcrypt.compare(password, user.password)
 
-  console.log(user.email)
-  if (!isMatch) return user
-  else {
-    const err = new Error("Unable to login")
-    err.httpStatusCode = 401
-    throw err
+  try {
+    console.log(isMatch)
+    if (!isMatch) {
+      const err = new Error("Unable to login")
+      err.httpStatusCode = 401
+      throw err
+    }
+
+    return user
+  } catch (error) {
+    console.log(error)
   }
 
-
 }
+// ProfileSchema.statics.findByCredentials = async (email, password) => {
+//   const user = await ProfileModel.findOne({ email })
+
+//   const isMatch = await bcrypt.compare(password, user.password)
+//   if (isMatch) return user
+//   else {
+//     const err = new Error("Unable to login")
+//     err.httpStatusCode = 401
+//     throw err
+//   }
+
+
+// }
 ProfileSchema.pre("save", async function (next) {
   const user = this
-
+  console.log(user)
   if (user.isModified("password")) {
     user.password = await bcrypt.hash(user.password, 8)
   }

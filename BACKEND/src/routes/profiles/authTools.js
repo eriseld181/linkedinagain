@@ -37,6 +37,7 @@ const refreshToken = async (oldRefreshToken) => {
 
 const authenticate = async (user) => {
     try {
+        console.log(user)
         // generate tokens
         const newAccessToken = await generateJWT({ _id: user._id })
         const newRefreshToken = await generateRefreshJWT({ _id: user._id })

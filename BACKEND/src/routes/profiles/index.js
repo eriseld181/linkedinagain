@@ -55,7 +55,7 @@ profileRouter.get('/facebookRedirect',
   passport.authenticate('facebook', { failureRedirect: '/login' }),
   function (req, res) {
     // Successful authentication, redirect home.
-    res.redirect('/');
+    res.send('You are logged in with facebook!');
   });
 
 
@@ -63,10 +63,10 @@ profileRouter.get('/facebookRedirect',
 //-------------------------------------------------------------------
 //Register to linkedin page => http://localhost:4000/profiles/register
 profileRouter.post("/register", async (req, res, next) => {
+
   try {
     let newUser = await new ProfileModel({
-      ...req.body,
-      password: await bcrypt.hash(req.body.password, 8),
+      ...req.body
     });
 
     await newUser.save();
@@ -96,7 +96,9 @@ profileRouter.post("/login", async (req, res, next) => {
   try {
     const { email, password } = req.body
     const user = await ProfileModel.findByCredentials(email, password)
+    console.log(user)
     const { token, refreshToken } = await authenticate(user)
+
     res.cookie("accessToken", token, {
       path: "/",
       httpOnly: true,

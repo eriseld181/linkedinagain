@@ -90,22 +90,23 @@ passport.use("facebook", new FacebookStrategy({
     ],
 },
     async (request, accessToken, refreshToken, profile, done) => {
+        console.log(profile)
         const newUser = {
             facebookId: profile.id,
-            name: profile.name.givenName,
-            surname: profile.name.familyName,
-            // email: profile.emails[0].value,
+            email: profile.emails[0].value,
             username: profile.emails[0].value,
-            //  bio: ' ',
+            surname: profile.name.familyName,
+            name: profile.name.givenName,
+            bio: ' ',
             title: ' ',
             area: ' ',
             refreshTokens: [],
         }
         try {
-            console.log(profile)
-            console.log(newUser)
+
+
             const user = await UserModel.findOne({ facebookId: profile.id })
-            console.log(user)
+
             if (user) {
                 done(null, user)
             } else {

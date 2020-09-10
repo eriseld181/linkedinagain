@@ -77,21 +77,7 @@ profileRouter.post("/register", async (req, res, next) => {
   }
 });
 //-------------------------------------------------------------------
-//Login to linkedin page
-
-// profileRouter.post("/login", async (req, res, next) => {
-//   try {
-
-//     const { email, password } = req.body
-//     console.log("reqqqq", req.body)
-//     const user = await ProfileModel.findByCredentials(email, password)
-//     const tokens = await authenticate(user)
-//     res.send(tokens)
-//   } catch (error) {
-//     console.log(error)
-//     next(error)
-//   }
-// })
+//login to the app
 profileRouter.post("/login", async (req, res, next) => {
   try {
     const { email, password } = req.body

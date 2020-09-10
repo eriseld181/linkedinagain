@@ -85,19 +85,7 @@ ProfileSchema.statics.findByCredentials = async (email, password) => {
   }
 
 }
-// ProfileSchema.statics.findByCredentials = async (email, password) => {
-//   const user = await ProfileModel.findOne({ email })
 
-//   const isMatch = await bcrypt.compare(password, user.password)
-//   if (isMatch) return user
-//   else {
-//     const err = new Error("Unable to login")
-//     err.httpStatusCode = 401
-//     throw err
-//   }
-
-
-// }
 ProfileSchema.pre("save", async function (next) {
   const user = this
   console.log(user)

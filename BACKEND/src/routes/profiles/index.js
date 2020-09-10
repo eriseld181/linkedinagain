@@ -23,10 +23,13 @@ profileRouter.get("/linkedinLogin", passport.authenticate("linkedin"),
   }),
     async (req, res, next) => {
       try {
-        const user = req.user;
-        res.send("ok");
 
-        // res.status(200).redirect('/');
+        const token = req.user.token;
+
+        res.cookie('token', token, {
+          httpOnly: true,
+        });
+
         res.status(200).send('Done');
       } catch (error) {
         console.log(error);
@@ -42,7 +45,12 @@ profileRouter.get("/googleLogin", passport.authenticate("google",
 profileRouter.get("/googleRedirect", passport.authenticate("google"),
   async (req, res, next) => {
     try {
-      res.send("OK")
+      const token = req.user.token;
+
+      res.cookie('token', token, {
+        httpOnly: true,
+      });
+      res.send('You are logged in with google!');
     } catch (error) {
     }
   })
@@ -54,7 +62,11 @@ profileRouter.get('/facebookLogin',
 profileRouter.get('/facebookRedirect',
   passport.authenticate('facebook', { failureRedirect: '/login' }),
   function (req, res) {
-    // Successful authentication, redirect home.
+    const token = req.user.token;
+
+    res.cookie('token', token, {
+      httpOnly: true,
+    });
     res.send('You are logged in with facebook!');
   });
 

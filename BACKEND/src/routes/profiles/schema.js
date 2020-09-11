@@ -51,7 +51,7 @@ const ProfileSchema = new Schema(
       {
         token: {
           type: String,
-          required: true,
+
         },
       },
     ],

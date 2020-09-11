@@ -56,38 +56,39 @@ const ProfileSchema = new Schema(
       },
     ],
     googleId: { type: String },
-    linkedinAuthId: { type: String }
+    linkedinId: { type: String },
+    facebookId: { type: String },
     //in case of error, waiting to finish oauth
   },
   { timestamps: true }
 
 );
-ProfileSchema.methods.toJSON = function () {
-  const user = this
-  const userObject = user.toObject()
-
-  delete userObject.password
-  delete userObject.__v
-
-  return userObject
-}
 
 ProfileSchema.statics.findByCredentials = async (email, password) => {
+  console.log(email)
   const user = await ProfileModel.findOne({ email })
+  console.log(user)
 
   const isMatch = await bcrypt.compare(password, user.password)
 
-  if (!isMatch) {
-    const err = new Error("Unable to login")
-    err.httpStatusCode = 401
-    throw err
+  try {
+    console.log(isMatch)
+    if (!isMatch) {
+      const err = new Error("Unable to login")
+      err.httpStatusCode = 401
+      throw err
+    }
+
+    return user
+  } catch (error) {
+    console.log(error)
   }
 
-  return user
 }
+
 ProfileSchema.pre("save", async function (next) {
   const user = this
-
+  console.log(user)
   if (user.isModified("password")) {
     user.password = await bcrypt.hash(user.password, 8)
   }
@@ -112,6 +113,15 @@ ProfileSchema.post("save", function (error, doc, next) {
     next()
   }
 })
+ProfileSchema.methods.toJSON = function () {
+  const user = this
+  const userObject = user.toObject()
+
+  delete userObject.password
+  delete userObject.__v
+
+  return userObject
+}
 
 const ProfileModel = model("profiles", ProfileSchema);
 module.exports = ProfileModel;

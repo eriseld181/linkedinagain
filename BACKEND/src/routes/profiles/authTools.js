@@ -37,6 +37,7 @@ const refreshToken = async (oldRefreshToken) => {
 
 const authenticate = async (user) => {
     try {
+        console.log(user)
         // generate tokens
         const newAccessToken = await generateJWT({ _id: user._id })
         const newRefreshToken = await generateRefreshJWT({ _id: user._id })
@@ -56,7 +57,7 @@ const generateJWT = (payload) =>
         jwt.sign(
             payload,
             process.env.JWT_SECRET,
-            { expiresIn: "900" },
+            { expiresIn: "1 week" },
             (err, token) => {
                 if (err) rej(err)
                 res(token)

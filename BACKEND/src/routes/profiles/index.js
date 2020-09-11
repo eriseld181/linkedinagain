@@ -13,20 +13,23 @@ const imagePath = path.join(__dirname, "../../../public/image/profile");
 const passport = require("passport")
 const { authenticate, refreshToken } = require("./authTools")
 const { authorize } = require("./authorize")
-//linkedin login
+//-------------------------------------------------------------------
+//linkedin login with oAuth
+profileRouter.get("/linkedinLogin", passport.authenticate("linkedin"),
 
-profileRouter.get('/linkedinLogin', passport.authenticate('linkedin'),
+  profileRouter.get("/linkedinRedirect", passport.authenticate("linkedin", {
 
-  profileRouter.get('/linkedinRedirect', passport.authenticate('linkedin', {
-
-    failureRedirect: '/login'
+    failureRedirect: "/login"
   }),
     async (req, res, next) => {
       try {
-        const user = req.user;
-        res.send('user', user);
 
-        // res.status(200).redirect('/');
+        const token = req.user.token;
+
+        res.cookie('token', token, {
+          httpOnly: true,
+        });
+
         res.status(200).send('Done');
       } catch (error) {
         console.log(error);
@@ -42,17 +45,40 @@ profileRouter.get("/googleLogin", passport.authenticate("google",
 profileRouter.get("/googleRedirect", passport.authenticate("google"),
   async (req, res, next) => {
     try {
-      res.send("OK")
+      const token = req.user.token;
+
+      res.cookie('token', token, {
+        httpOnly: true,
+      });
+      res.send('You are logged in with google!');
     } catch (error) {
     }
   })
 //-------------------------------------------------------------------
+//Facebook login with oAuth
+profileRouter.get('/facebookLogin',
+  passport.authenticate('facebook', { scope: ["email"] }));
+
+profileRouter.get('/facebookRedirect',
+  passport.authenticate('facebook', { failureRedirect: '/login' }),
+  function (req, res) {
+    const token = req.user.token;
+
+    res.cookie('token', token, {
+      httpOnly: true,
+    });
+    res.send('You are logged in with facebook!');
+  });
+
+
+
+//-------------------------------------------------------------------
 //Register to linkedin page => http://localhost:4000/profiles/register
 profileRouter.post("/register", async (req, res, next) => {
+
   try {
     let newUser = await new ProfileModel({
-      ...req.body,
-      password: await bcrypt.hash(req.body.password, 8),
+      ...req.body
     });
 
     await newUser.save();
@@ -63,17 +89,26 @@ profileRouter.post("/register", async (req, res, next) => {
   }
 });
 //-------------------------------------------------------------------
-//Login to linkedin page
-
+//login to the app
 profileRouter.post("/login", async (req, res, next) => {
   try {
-    console.log(req.body)
     const { email, password } = req.body
     const user = await ProfileModel.findByCredentials(email, password)
-    const tokens = await authenticate(user)
-    res.send(tokens)
+    console.log(user)
+    const { token, refreshToken } = await authenticate(user)
+
+    res.cookie("accessToken", token, {
+      path: "/",
+      httpOnly: true,
+      sameSite: true,
+    })
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      path: "/users/refreshToken",
+      sameSite: true,
+    })
+    res.send({ token, refreshToken })
   } catch (error) {
-    console.log(error)
     next(error)
   }
 })

@@ -2,7 +2,7 @@ import React from "react";
 import { Table, Form, Col, Row, Button, Container, Tab, Tabs, FormGroup, FormControl, Image, Alert } from "react-bootstrap";
 import { Link, withRouter } from 'react-router-dom'
 
-import Login from "./Login"
+
 
 class Register extends React.Component {
   state = {

@@ -192,20 +192,20 @@ class Register extends React.Component {
                   <Button block bsSize="large" type="submit">
                     Login
             </Button>
-   
-            <a href="https://www.facebook.com/">
-            <AiFillFacebook  style={{width: "50px", height: "40px", marginTop: "30px"}}/></a>
-            <a href="https://www.linkedin.com/">
-            <AiFillLinkedin style={{width: "50px", height: "40px", marginTop: "30px"}}/></a>
- 
+
+                  <a href="https://ekbackend.herokuapp.com/profiles/facebookLogin">
+                    <AiFillFacebook style={{ width: "50px", height: "40px", marginTop: "30px" }} /></a>
+                  <a href="https://ekbackend.herokuapp.com/profiles/linkedinLogin">
+                    <AiFillLinkedin style={{ width: "50px", height: "40px", marginTop: "30px" }} /></a>
+
 
                 </form>
               </div>
-            
+
             </Container>
           </Tab>
         </Tabs>
-       
+
       </div >
     );
   }

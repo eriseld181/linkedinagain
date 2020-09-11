@@ -2,6 +2,7 @@ import React from "react";
 import { Table, Form, Col, Row, Button, Container, Tab, Tabs, FormGroup, FormControl, Image, Alert } from "react-bootstrap";
 import { Link, withRouter } from 'react-router-dom'
 
+import { AiFillFacebook, AiFillLinkedin } from "react-icons/ai";
 
 
 class Register extends React.Component {
@@ -191,12 +192,19 @@ class Register extends React.Component {
                   <Button block bsSize="large" type="submit">
                     Login
             </Button>
+   
+       
+            <AiFillFacebook  style={{width: "50px"}}/>
+            <AiFillLinkedin />
+ 
+
                 </form>
               </div>
+            
             </Container>
           </Tab>
         </Tabs>
-
+       
       </div >
     );
   }

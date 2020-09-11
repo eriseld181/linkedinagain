@@ -194,8 +194,8 @@ class Register extends React.Component {
             </Button>
    
        
-            <AiFillFacebook  style={{width: "50px"}}/>
-            <AiFillLinkedin />
+            <AiFillFacebook  style={{width: "50px", height: "40px", marginTop: "30px"}}/>
+            <AiFillLinkedin style={{width: "50px", height: "40px", marginTop: "30px"}}/>
  
 
                 </form>

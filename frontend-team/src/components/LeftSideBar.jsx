@@ -25,7 +25,7 @@ export class SideBar extends Component {
                   <div id="profilePhotoLeftSideBar">
                     {this.props.info.image
                       ? <Image src={this.props.info.image} />
-                      : <Image src='https://img.icons8.com/officel/2x/user.png' />
+                      : <Image src='https://toppng.com/uploads/preview/login-icons-user-flat-icon-115534363917nmr24mjcm.png' />
                     }
                   </div>
                   <h5 className="text-center">Welcome, {this.props.info.name}</h5>

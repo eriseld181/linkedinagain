@@ -41,7 +41,7 @@ class Network extends React.Component {
                                     {user.image === undefined || user.image === ''
                                         ? <Image
                                             onClick={() => this.props.history.push("/profiles/" + user.username)}
-                                            src='https://img.icons8.com/officel/2x/user.png'
+                                            src='https://toppng.com/uploads/preview/login-icons-user-flat-icon-115534363917nmr24mjcm.png'
                                             style={{ height: "4rem", width: "4rem", border: "1px solid lightgray", borderRadius: "2rem" }}
                                             className="card-img img-fluid"
                                             alt="image"

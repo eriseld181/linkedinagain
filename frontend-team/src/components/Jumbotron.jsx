@@ -99,7 +99,7 @@ class JumBotron extends Component {
                         ?
                         <Image src={this.props.profileInfo.image} />
                         :
-                        <Image src='https://img.icons8.com/officel/2x/user.png' />
+                        <Image src='https://toppng.com/uploads/preview/login-icons-user-flat-icon-115534363917nmr24mjcm.png' />
                     }
                 </div>
                 <div>
@@ -118,10 +118,10 @@ class JumBotron extends Component {
                                 {this.props.profileInfo.username === this.props.username ?
                                     <>
                                         <div className="d-flex ">
-                                            <Button className=" mr-2">Add profile section</Button>
-                                            <Dropdown>
-                                                <Dropdown.Toggle variant="success" id="dropdown-basic">
-                                                    MORE </Dropdown.Toggle>
+                                            <Button className=" mr-2" style={{ width: "180px", height: "40px" }} ><p style={{ fontSize: "18px" }}>Add profile section </p> </Button>
+                                            <Dropdown style={{ height: "30px" }}>
+                                                <Dropdown.Toggle variant="success" id="dropdown-basic" >
+                                                    <span style={{ fontSize: "15px", }}>MORE</span></Dropdown.Toggle>
 
                                                 <Dropdown.Menu>
                                                     <Dropdown.Item href="https://linkedin-team.herokuapp.com/profiles/eriseld/cv">GET THE PDF</Dropdown.Item>

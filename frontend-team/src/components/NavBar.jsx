@@ -58,7 +58,7 @@ class NavBar extends Component {
                   {this.props.userImage ?
                     <Image src={this.props.userImage[0].image} style={{ width: "25px", height: "25px", borderRadius: "35%", margin: "0" }} />
                     :
-                    <Image src='https://img.icons8.com/officel/2x/user.png' style={{ width: "25px", height: "25px", borderRadius: "35%", margin: "0" }} />
+                    <Image src='https://toppng.com/uploads/preview/login-icons-user-flat-icon-115534363917nmr24mjcm.png' style={{ width: "25px", height: "25px", borderRadius: "35%", margin: "0" }} />
                   }
                   <NavDropdown title="Dropdown" className="basic-nav-dropdown" variant="light" title='Me'>
                     <NavDropdown.Item onSelect={() => this.props.history.push("/profiles/eriseld")}>My Acc</NavDropdown.Item>

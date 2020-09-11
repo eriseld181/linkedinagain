@@ -165,7 +165,7 @@ class Register extends React.Component {
               </Row>
             </Container>
           </Tab>
-          <Tab eventKey="profile" title="Profile">
+          <Tab eventKey="profile" title="Log In">
             <Container id="logingPage" className="d-flex justify-content-center ">
 
               <div className="Login">

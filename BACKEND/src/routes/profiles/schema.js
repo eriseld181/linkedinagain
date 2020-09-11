@@ -8,7 +8,9 @@ const ProfileSchema = new Schema(
       type: String,
       // required: true,
     },
-    password: { type: String },
+    password: {
+      type: String
+    },
     surname: {
       type: String,
       // required: true,

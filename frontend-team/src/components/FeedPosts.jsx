@@ -104,7 +104,7 @@ class FeedPosts extends Component {
                             </Link>
                             :
                             <Link to={"/profiles/" + this.props.info.user[0].username}>
-                                <Image fluid src='https://img.icons8.com/officel/2x/user.png' />
+                                <Image fluid src='https://toppng.com/uploads/preview/login-icons-user-flat-icon-115534363917nmr24mjcm.png' />
                             </Link>
                         }
                     </div>
@@ -167,7 +167,7 @@ class FeedPosts extends Component {
                                     {this.props.userImage ?
                                         <Image src={this.props.userImage[0].image} />
                                         :
-                                        <Image src='https://img.icons8.com/officel/2x/user.png' />
+                                        <Image src='https://toppng.com/uploads/preview/login-icons-user-flat-icon-115534363917nmr24mjcm.png' />
                                     }
                                     <div className="inputComment">
                                         <input className="comment" onChange={this.addComment}

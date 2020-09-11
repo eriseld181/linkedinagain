@@ -67,11 +67,14 @@ class Register extends React.Component {
         <Tabs className="justify-content-center" defaultActiveKey="profile" id="uncontrolled-tab-example">
           <Tab eventKey="register" variant="pills" title="Register">
             {/* this is Register */}
-            <Container style={{ height: "90vh", width: "60vh", marginTop: "100px" }}>
-              <Row className="d-flex justfify-content-center mt-5" style={{ border: "1px solid black", height: "500px", backgroundColor: "white" }}>
+            <Container className="d-flex justfify-content-center" style={{ height: "90vh", width: "60vh", marginTop: "100px" }}>
+              <Row className="d-flex justfify-content-center" style={{ border: "1px solid black", height: "500px", backgroundColor: "white" }}>
+                <Image className="mb-1 mt-3 justfify-content-center" src="https://cdn.worldvectorlogo.com/logos/linkedin.svg" />
+                <h2 className="justfify-content-center mt-1 mb-2 ml-5 mt-3">Register, it's free!</h2>
                 <Col md={6} className="offset-3">
-                  <h3 className="text-center mt-3">Get started, it's free!</h3>
-                  <Form onSubmit={this.fetchRegisterUser}>
+
+                  <Form >
+
                     <Row>
                       <Col>
                         <Form.Group>
@@ -131,17 +134,15 @@ class Register extends React.Component {
                           />
                         </Form.Group>
                       </Col>
-
+                      {this.state.show ||
+                        <Button type="submit" style={{ width: "240px", height: "40px" }} onClick={this.props.history.push("/feed")}>
+                          {console.log(this.state.person)}
+                          <Link to="/feed" >
+                            <p style={{ color: "white" }}>Join now</p>
+                          </Link>
+                        </Button>
+                      }
                     </Row>
-
-                    {this.state.show ||
-                      <Button type="submit" style={{ width: "240px", height: "40px" }} onClick={this.fetchRegisterUser}>
-                        {console.log(this.state.person)}
-                        <Link to="/feed" >
-                          <p style={{ color: "white" }}>Join now</p>
-                        </Link>
-                      </Button>
-                    }
                   </Form>
                   {this.state.showUser ?
                     <>

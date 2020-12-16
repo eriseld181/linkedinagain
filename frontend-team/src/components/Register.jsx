@@ -33,6 +33,24 @@ class Register extends React.Component {
     }
   }
 
+  fetchLoginUser = async () => {
+    let resp = await fetch(process.env.APIKEY + '/profile/login', {
+      method: 'POST',
+      body: JSON.stringify(this.state.user),
+      credentials: 'include',
+      headers: new Headers({
+        'Content-Type': 'application/json',
+      }),
+    });
+    if (resp.ok) {
+
+      this.props.history.push('/feed');
+    } else {
+      this.setState({ signup: true, fromLogin: true });
+    }
+  };
+
+
   fetchRegisterUser = async () => {
     //dont forget to send in .env
     const fetchRegister = await fetch("http://localhost:4001/profiles/register", {
@@ -189,7 +207,7 @@ class Register extends React.Component {
                       type="password"
                     />
                   </FormGroup>
-                  <Button block bsSize="large" type="submit">
+                  <Button block bsSize="large" type="submit" onClick={this.fetchLoginUser()}>
                     Login
             </Button>
 
